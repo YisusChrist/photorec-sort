@@ -8,10 +8,13 @@
     <a href="https://github.com/yisuschrist/sort-PhotorecRecoveredFiles/">
         <img src="https://img.shields.io/github/stars/yisuschrist/sort-PhotorecRecoveredFiles?color=171b20&label=Stargazers&logo=octicon-star&labelColor=70a5eb">&nbsp;&nbsp;&nbsp;
     </a>
+    <a href="https://github.com/yisuschrist/urls_organizer/actions">
+        <img alt="Tests Passing" src="https://github.com/yisuschrist/sort-PhotorecRecoveredFiles/actions/workflows/github-code-scanning/codeql/badge.svg">&nbsp;&nbsp;&nbsp;
+    </a>
     <a href="https://github.com/yisuschrist/sort-PhotorecRecoveredFiles/pulls">
         <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/yisuschrist/sort-PhotorecRecoveredFiles?color=0088ff">&nbsp;&nbsp;&nbsp;
     </a>
-    <a href="https://opensource.org/license/gpl-3-0/">
+    <a href="https://opensource.org/license/gpl-3-0">
         <img alt="License" src="https://img.shields.io/github/license/yisuschrist/sort-PhotorecRecoveredFiles?color=0088ff">
     </a>
     <!--
