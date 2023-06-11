@@ -149,3 +149,17 @@ The result will look like:
 20210122_145813.jpg
 20210122_153155.jpg
 ```
+
+## TODO
+
+Planing to add the following features:
+
+- [ ] Reorganize and beautify the Readme adding sections
+- [ ] Add an installation bash script
+- [ ] Add an uninstallation bash script
+- [ ] Add a full documentation in Wiki section
+- [ ] Add a Changelog / Release Notes
+
+## Credits
+
+This is a forked version from the original project [sort-PhotorecRecoveredFiles](https://github.com/tfrdidi/sort-PhotorecRecoveredFiles).
