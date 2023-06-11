@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+@file     numberOfFilesPerFolderLimiter.py
+@date     2023-06-11
+@version  1.1
+@license  GNU General Public License v3.0
+@author   Alejandro Gonzalez Momblan (agelrenorenardo@gmail.com)
+@desc     Limits the number of files per folder in a directory.
+"""
+
 import sys
 import math
 import os
@@ -9,9 +21,11 @@ def limitFilesPerFolder(folder, maxNumberOfFilesPerFolder):
         for dir in dirs:
             dirPath = os.path.join(root, dir)
             filesInFolder = len(os.listdir(dirPath))
-            if(filesInFolder > maxNumberOfFilesPerFolder):
-                numberOfSubfolders = ((filesInFolder - 1) // maxNumberOfFilesPerFolder) + 1
-                for subFolderNumber in range(1, numberOfSubfolders+1):
+            if filesInFolder > maxNumberOfFilesPerFolder:
+                numberOfSubfolders = (
+                    (filesInFolder - 1) // maxNumberOfFilesPerFolder
+                ) + 1
+                for subFolderNumber in range(1, numberOfSubfolders + 1):
                     subFolderPath = os.path.join(dirPath, str(subFolderNumber))
                     if not os.path.exists(subFolderPath):
                         os.mkdir(subFolderPath)
@@ -19,9 +33,10 @@ def limitFilesPerFolder(folder, maxNumberOfFilesPerFolder):
                 for file in os.listdir(dirPath):
                     source = os.path.join(dirPath, file)
                     if os.path.isfile(source):
-                        destDir = str(((fileCounter - 1) // maxNumberOfFilesPerFolder) + 1)
+                        destDir = str(
+                            ((fileCounter - 1) // maxNumberOfFilesPerFolder)
+                            + 1
+                        )
                         destination = os.path.join(dirPath, destDir, file)
                         shutil.move(source, destination)
                         fileCounter += 1
-
-

@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+@file     jpgSorter.py
+@date     2023-06-11
+@version  1.1
+@license  GNU General Public License v3.0
+@author   Alejandro Gonzalez Momblan (agelrenorenardo@gmail.com)
+@desc     Sorts jpg images in a directory by creation date.
+"""
+
 import os.path
 import ntpath
 from time import localtime, strftime, strptime, mktime
@@ -6,33 +18,35 @@ import exifread
 
 unknownDateFolderName = "date-unknown"
 
+
 def getMinimumCreationTime(exif_data):
     creationTime = None
-    dateTime = exif_data.get('DateTime')
-    if (dateTime is None):
-        dateTime = exif_data.get('Image DateTime')
-    dateTimeOriginal = exif_data.get('EXIF DateTimeOriginal')
-    dateTimeDigitized = exif_data.get('EXIF DateTimeDigitized')
+    dateTime = exif_data.get("DateTime")
+    if dateTime is None:
+        dateTime = exif_data.get("Image DateTime")
+    dateTimeOriginal = exif_data.get("EXIF DateTimeOriginal")
+    dateTimeDigitized = exif_data.get("EXIF DateTimeDigitized")
 
-    # 3 differnt time fields that can be set independently result in 9 if-cases
-    if (dateTime is None):
-        if (dateTimeOriginal is None):
+    # 3 different time fields that can be set independently result in 9 if-cases
+    if dateTime is None:
+        if dateTimeOriginal is None:
             # case 1/9: dateTime, dateTimeOriginal, and dateTimeDigitized = None
             # case 2/9: dateTime and dateTimeOriginal = None, then use dateTimeDigitized
             creationTime = dateTimeDigitized
         else:
             # case 3/9: dateTime and dateTimeDigitized = None, then use dateTimeOriginal
-            # case 4/9: dateTime = None, prefere dateTimeOriginal over dateTimeDigitized
+            # case 4/9: dateTime = None, prefer dateTimeOriginal over dateTimeDigitized
             creationTime = dateTimeOriginal
     else:
-        # case 5-9: when creationTime is set, prefere it over the others
+        # case 5-9: when creationTime is set, prefer it over the others
         creationTime = dateTime
 
     return creationTime
 
+
 def postprocessImage(images, imageDirectory, fileName):
     imagePath = os.path.join(imageDirectory, fileName)
-    image = open(imagePath, 'rb')
+    image = open(imagePath, "rb")
     creationTime = None
     try:
         exifTags = exifread.process_file(image, details=False)
@@ -52,10 +66,12 @@ def postprocessImage(images, imageDirectory, fileName):
     images.append((mktime(creationTime), imagePath))
     image.close()
 
+
 # Creates the requested path recursively.
 def createPath(newPath):
     if not os.path.exists(newPath):
         os.makedirs(newPath)
+
 
 # Pass None for month to create 'year/eventNumber' directories instead of 'year/month/eventNumber'.
 def createNewFolder(destinationRoot, year, month, eventNumber):
@@ -66,12 +82,16 @@ def createNewFolder(destinationRoot, year, month, eventNumber):
 
     createPath(newPath)
 
+
 def createUnknownDateFolder(destinationRoot):
     path = os.path.join(destinationRoot, unknownDateFolderName)
     createPath(path)
 
-def writeImages(images, destinationRoot, minEventDeltaDays, splitByMonth=False):
-    minEventDelta = minEventDeltaDays * 60 * 60 * 24 # convert in seconds
+
+def writeImages(
+    images, destinationRoot, minEventDeltaDays, splitByMonth=False
+):
+    minEventDelta = minEventDeltaDays * 60 * 60 * 24  # convert in seconds
     sortedImages = sorted(images)
     previousTime = None
     eventNumber = 0
@@ -87,13 +107,15 @@ def writeImages(images, destinationRoot, minEventDeltaDays, splitByMonth=False):
         creationDate = strftime("%d/%m/%Y", t)
         fileName = ntpath.basename(imageTuple[1])
 
-        if(creationDate == today):
+        if creationDate == today:
             createUnknownDateFolder(destinationRoot)
             destination = os.path.join(destinationRoot, unknownDateFolderName)
             destinationFilePath = os.path.join(destination, fileName)
 
         else:
-            if (previousTime == None) or ((previousTime + minEventDelta) < imageTuple[0]):
+            if (previousTime == None) or (
+                (previousTime + minEventDelta) < imageTuple[0]
+            ):
                 eventNumber = eventNumber + 1
                 createNewFolder(destinationRoot, year, month, eventNumber)
 
@@ -115,7 +137,7 @@ def writeImages(images, destinationRoot, minEventDeltaDays, splitByMonth=False):
         if not (os.path.exists(destinationFilePath)):
             shutil.move(imageTuple[1], destination)
         else:
-            if (os.path.exists(imageTuple[1])):
+            if os.path.exists(imageTuple[1]):
                 os.remove(imageTuple[1])
 
 
