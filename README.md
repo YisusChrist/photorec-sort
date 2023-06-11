@@ -43,7 +43,7 @@ This program sPRF helps you sorting your files. First of all, the **files are co
 
 First install the package [exifread](https://pypi.python.org/pypi/ExifRead):
 
-```
+```bash
 pip install exifread
 ```
 
@@ -51,7 +51,7 @@ pip install exifread
 
 Then run the sorter:
 
-```
+```bash
 python recovery.py <path to files recovered by Photorec> <destination>
 ```
 
@@ -63,7 +63,7 @@ The first output of the program is the number of files to copy. To count them mi
 
 For an overview of all arguments, run with the `-h` option:
 
-```
+```bash
 python recovery.py -h
 ```
 
@@ -71,7 +71,7 @@ python recovery.py -h
 
 All directories contain a maximum of 500 files by default. If there are more for a file type, numbered subdirectories are created. If you want another file-limit, e.g. 1000, pass that number as the third parameter when running the program:
 
-```
+```bash
 python recovery.py <path to files recovered by Photorec> <destination> -n1000
 ```
 
@@ -91,7 +91,7 @@ destination
 
 Sometimes you might want to sort each year by month. This can be done using the `-m` parameter:
 
-```
+```bash
 python recovery.py <path to files recovered by Photorec> <destination> -m
 ```
 
@@ -115,7 +115,7 @@ destination
 
 Use the `-k` parameter to keep the original filenames:
 
-```
+```bash
 python recovery.py <path to files recovered by Photorec> <destination> -k
 ```
 
@@ -123,7 +123,7 @@ python recovery.py <path to files recovered by Photorec> <destination> -k
 
 For the case you want to reduce or increase the timespan between events, simply use the parameter `-d`. The default is 4:
 
-```
+```bash
 python recovery.py <path to files recovered by Photorec> <destination> -d10
 ```
 
@@ -131,7 +131,7 @@ python recovery.py <path to files recovered by Photorec> <destination> -d10
 
 If the original jpg image files were named by `<Date>_<Time>` it might be useful to rename the recovered files in the same way. This can be done by adding the parameter `-j`.
 
-```
+```bash
 python recovery.py <path to files recovered by Photorec> <destination> -j
 ```
 
