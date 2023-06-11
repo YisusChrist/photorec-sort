@@ -1,4 +1,39 @@
-# Sort files recovered by Photorec
+<p align="center">
+    <a href="https://github.com/yisuschrist/sort-PhotorecRecoveredFiles/issues">
+        <img src="https://img.shields.io/github/issues/yisuschrist/sort-PhotorecRecoveredFiles?color=171b20&label=Issues%20%20&logo=gnubash&labelColor=e05f65&logoColor=ffffff">&nbsp;&nbsp;&nbsp;
+    </a>
+    <a href="https://github.com/yisuschrist/sort-PhotorecRecoveredFiles/forks">
+        <img src="https://img.shields.io/github/forks/yisuschrist/sort-PhotorecRecoveredFiles?color=171b20&label=Forks%20%20&logo=git&labelColor=f1cf8a&logoColor=ffffff">&nbsp;&nbsp;&nbsp;
+    </a>
+    <a href="https://github.com/yisuschrist/sort-PhotorecRecoveredFiles/">
+        <img src="https://img.shields.io/github/stars/yisuschrist/sort-PhotorecRecoveredFiles?color=171b20&label=Stargazers&logo=octicon-star&labelColor=70a5eb">&nbsp;&nbsp;&nbsp;
+    </a>
+    <a href="https://github.com/yisuschrist/sort-PhotorecRecoveredFiles/pulls">
+        <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/yisuschrist/sort-PhotorecRecoveredFiles?color=0088ff">&nbsp;&nbsp;&nbsp;
+    </a>
+    <a href="https://opensource.org/license/gpl-3-0/">
+        <img alt="License" src="https://img.shields.io/github/license/yisuschrist/sort-PhotorecRecoveredFiles?color=0088ff">
+    </a>
+    <!--
+    <a href="https://github.com/yisuschrist/sort-PhotorecRecoveredFiles/issues/contributors">
+        <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/yisuschrist/sort-PhotorecRecoveredFiles" />
+    </a>
+    -->
+</p>
+
+<br>
+
+<p align="center">
+    <a href="https://github.com/yisuschrist/sort-PhotorecRecoveredFiles/issues/new/choose">Report Bug</a>
+    ·
+    <a href="https://github.com/yisuschrist/sort-PhotorecRecoveredFiles/issues/new/choose">Request Feature</a>
+    ·
+    <a href="https://github.com/yisuschrist/sort-PhotorecRecoveredFiles/discussions">Ask Question</a>
+    ·
+    <a href="https://github.com/yisuschrist/sort-PhotorecRecoveredFiles/security/policy#reporting-a-vulnerability">Report security bug</a>
+</p>
+
+<br>
 
 Photorec does a great job when recovering deleted files. But the result is a huge, unsorted, unnamed amount of files. Especially for external hard drives serving as backup of all the personal data, sorting them is an endless job.
 
