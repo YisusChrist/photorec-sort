@@ -1,27 +1,21 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-"""
-@file     jpgSorter.py
-@date     2023-06-11
-@version  1.2
-@license  GNU General Public License v3.0
-@author   Alejandro Gonzalez Momblan (agelrenorenardo@gmail.com)
-@desc     Sorts jpg images in a directory by creation date.
-"""
+"""Sorts jpg images in a directory by creation date."""
 
 import ntpath
 import os.path
 import shutil
-from time import localtime, mktime, strftime, strptime
-from typing import List, Optional, Tuple
+from time import localtime, mktime, strftime, strptime, struct_time
+from typing import Any, Optional
 
-import exifread
+import exifread  # type: ignore
+from rich import print  # type: ignore
+from rich.progress import Progress
 
-unknownDateFolderName = "date-unknown"
+from .logs import logger
+
+unknownDateFolderName: str = "date-unknown"
 
 
-def getMinimumCreationTime(exif_data: dict) -> str:
+def getMinimumCreationTime(exif_data: dict) -> Any:
     """
     Returns the minimum creation time from the given exif data.
 
@@ -60,7 +54,7 @@ def getMinimumCreationTime(exif_data: dict) -> str:
     return creationTime
 
 
-def postprocessImage(images: list, imageDirectory: str, fileName: str) -> None:
+def postprocessImage(images: list, imagePath: str) -> None:
     """
     Adds the image to the list of images to be sorted.
 
@@ -72,23 +66,25 @@ def postprocessImage(images: list, imageDirectory: str, fileName: str) -> None:
     Examples:
         >>> postprocessImage([], "C:\\Users\\User\\Desktop\\folder", "image.jpg")
     """
-    imagePath = os.path.join(imageDirectory, fileName)
+    fileName: str = ntpath.basename(imagePath)
+    # print(f"Processing {fileName}...")
     try:
         with open(imagePath, "rb") as image:
-            exifTags = exifread.process_file(image, details=False)
+            exifTags: dict[str, Any] = exifread.process_file(image, details=False)
             creationTime = getMinimumCreationTime(exifTags)
     except Exception:
         print("Invalid exif tags for " + fileName)
         creationTime = None
 
+    seconds: float = os.path.getctime(imagePath)
     # distinct different time types
-    if creationTime is None:
-        creationTime = localtime(os.path.getctime(imagePath))
+    if not creationTime:
+        creationTime = localtime(seconds)
     else:
         try:
             creationTime = strptime(creationTime, "%Y:%m:%d %H:%M:%S")
         except Exception:
-            creationTime = localtime(os.path.getctime(imagePath))
+            creationTime = localtime(seconds)
 
     images.append((mktime(creationTime), imagePath))
 
@@ -121,7 +117,7 @@ def createNewFolder(
     Example:
         >>> createNewFolder("/path/to/destination", "2023", "06", 1)
     """
-    newPath = (
+    newPath: str = (
         os.path.join(destinationRoot, year, month, str(eventNumber))
         if month
         else os.path.join(destinationRoot, year, str(eventNumber))
@@ -141,12 +137,12 @@ def createUnknownDateFolder(destinationRoot: str) -> None:
     Example:
         >>> createUnknownDateFolder("/path/to/destination")
     """
-    path = os.path.join(destinationRoot, unknownDateFolderName)
+    path: str = os.path.join(destinationRoot, unknownDateFolderName)
     createPath(path)
 
 
 def writeImages(
-    images: List[Tuple[float, str]],
+    images: list[tuple[float, str]],
     destinationRoot: str,
     minEventDeltaDays: int,
     splitByMonth: bool = False,
@@ -171,21 +167,21 @@ def writeImages(
         >>> ]
         >>> writeImages(images, "/path/to/destination", 7, splitByMonth=True)
     """
-    minEventDelta = minEventDeltaDays * 60 * 60 * 24  # convert in seconds
-    sortedImages = sorted(images)
+    minEventDelta: int = minEventDeltaDays * 60 * 60 * 24  # convert in seconds
+    sortedImages: list[tuple[float, str]] = sorted(images)
     previousTime = None
     eventNumber = 0
-    previousDestination = None
+    previousDestination: str = ""
     today = strftime("%d/%m/%Y")
 
     for imageTuple in sortedImages:
-        destination = ""
-        destinationFilePath = ""
-        t = localtime(imageTuple[0])
-        year = strftime("%Y", t)
-        month = strftime("%m", t) if splitByMonth else None
-        creationDate = strftime("%d/%m/%Y", t)
-        fileName = ntpath.basename(imageTuple[1])
+        destination: str = ""
+        destinationFilePath: str = ""
+        t: struct_time = localtime(imageTuple[0])
+        year: str = strftime("%Y", t)
+        month: str = strftime("%m", t) if splitByMonth else ""
+        creationDate: str = strftime("%d/%m/%Y", t)
+        fileName: str = ntpath.basename(imageTuple[1])
 
         if creationDate == today:
             # Create a folder for images with an unknown date
@@ -194,17 +190,14 @@ def writeImages(
             destinationFilePath = os.path.join(destination, fileName)
 
         else:
-            if (
-                previousTime is None
-                or (previousTime + minEventDelta) < imageTuple[0]
-            ):
+            if previousTime is None or (previousTime + minEventDelta) < imageTuple[0]:
                 # If the time difference exceeds the minimum event delta, create a new folder
                 eventNumber += 1
                 createNewFolder(destinationRoot, year, month, eventNumber)
 
             previousTime = imageTuple[0]
 
-            destComponents = [destinationRoot, year, month, str(eventNumber)]
+            destComponents: list[str] = [destinationRoot, year, month, str(eventNumber)]
             destComponents = [v for v in destComponents if v is not None]
             destination = os.path.join(*destComponents)
 
@@ -225,23 +218,47 @@ def writeImages(
 
 
 def postprocessImages(
-    imageDirectory: str, minEventDeltaDays: int, splitByMonth: bool
+    destination: str, minEventDeltaDays: int, splitByMonth: bool
 ) -> None:
     """
     Post-processes the images in the specified directory by organizing them
     into destination folders.
 
     Args:
-        imageDirectory (str): The directory containing the images.
+        destination (str): The destination directory containing the images.
         minEventDeltaDays (int): The minimum event delta in days.
         splitByMonth (bool): Whether to split the destination folders by month.
 
     Example:
         >>> postprocessImages("/path/to/images", 7, splitByMonth=True)
     """
-    images = []
-    for root, dirs, files in os.walk(imageDirectory):
-        for file in files:
-            postprocessImage(images, imageDirectory, file)
+    logger.info("Post-processing images...")
 
-    writeImages(images, imageDirectory, minEventDeltaDays, splitByMonth)
+    images_extension: list[str] = ["jpg", "jpeg", "png", "gif", "bmp", "tiff", "webp"]
+
+    # Filter directories with images
+    directories: list[str] = os.listdir(destination)
+    directories = [
+        os.path.join(destination, d)
+        for d in directories
+        if d.lower() in images_extension
+    ]
+
+    for imageDirectory in directories:
+        print(f"Processing images in {imageDirectory}...")
+        images: list = []
+        with Progress() as progress:
+            # Count the number of files inside the directory
+            for root, dirs, files in os.walk(imageDirectory):
+                task = progress.add_task("Processing directories...", total=len(files))
+                for file in files:
+                    file_path: str = os.path.join(root, file)
+                    postprocessImage(images, file_path)
+                    progress.update(task, advance=1)
+
+            writeImages(
+                images,
+                imageDirectory,
+                minEventDeltaDays,
+                splitByMonth,
+            )

@@ -1,22 +1,10 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-"""
-@file     numberOfFilesPerFolderLimiter.py
-@date     2023-06-11
-@version  1.2
-@license  GNU General Public License v3.0
-@author   Alejandro Gonzalez Momblan (agelrenorenardo@gmail.com)
-@desc     Limits the number of files per folder in a directory.
-"""
+"""Limits the number of files per folder in a directory."""
 
 import os
 import shutil
 
 
-def distributeFilesIntoSubfolders(
-    dirPath: str, maxNumberOfFilesPerFolder: int
-) -> None:
+def distributeFilesIntoSubfolders(dirPath: str, maxNumberOfFilesPerFolder: int) -> None:
     """
     Distributes files into subfolders based on the maximum number of files per
     folder.
@@ -26,7 +14,7 @@ def distributeFilesIntoSubfolders(
         maxNumberOfFilesPerFolder (int): The maximum number of files per
             folder.
     """
-    numberOfSubfolders = (
+    numberOfSubfolders: int = (
         len(os.listdir(dirPath)) - 1
     ) // maxNumberOfFilesPerFolder + 1
     createSubfolders(dirPath, numberOfSubfolders)
@@ -46,9 +34,7 @@ def createSubfolders(dirPath: str, numberOfSubfolders: int) -> None:
         os.makedirs(subFolderPath, exist_ok=True)
 
 
-def moveFilesToSubfolders(
-    dirPath: str, maxNumberOfFilesPerFolder: int
-) -> None:
+def moveFilesToSubfolders(dirPath: str, maxNumberOfFilesPerFolder: int) -> None:
     """
     Moves files to the appropriate subfolders based on the maximum number of
     files per folder.
@@ -87,9 +73,7 @@ def limitFilesPerFolder(folder: str, maxNumberOfFilesPerFolder: int) -> None:
     if not os.path.exists(folder):
         raise ValueError("The folder does not exist.")
     if maxNumberOfFilesPerFolder <= 0:
-        raise ValueError(
-            "The maxNumberOfFilesPerFolder is not a positive integer."
-        )
+        raise ValueError("The maxNumberOfFilesPerFolder is not a positive integer.")
 
     # Iterate through directories and subdirectories in reverse order
     for root, dirs, files in os.walk(folder, topdown=False):
@@ -98,8 +82,6 @@ def limitFilesPerFolder(folder: str, maxNumberOfFilesPerFolder: int) -> None:
             filesInFolder = len(os.listdir(dirPath))
 
             if filesInFolder > maxNumberOfFilesPerFolder:
-                distributeFilesIntoSubfolders(
-                    dirPath, maxNumberOfFilesPerFolder
-                )
+                distributeFilesIntoSubfolders(dirPath, maxNumberOfFilesPerFolder)
 
     # TODO: Add multiprocessing using Pool().map
