@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import shutil
 from time import strftime, strptime
 
@@ -168,6 +169,43 @@ def moveFile(
     """
 
 
+def sanitize_path(path: str) -> str:
+    """
+    Sanitize the path using pathlib, resolving it and ensuring no path traversal.
+
+    Args:
+        path (str): The path to sanitize.
+
+    Returns:
+        str: The sanitized path.
+    """
+    # Convert the path to an absolute resolved path
+    resolved_path: Path = Path(path).resolve()
+
+    # Ensure the resolved path does not contain any '..' traversal
+    if ".." in resolved_path.parts:
+        raise ValueError(f"Invalid path: {path}. Potential path traversal detected.")
+
+    return str(resolved_path)
+
+
+def prompt_for_directory(directory_type: str) -> str:
+    """
+    Prompt the user for a valid directory input.
+
+    Args:
+        directory_type (str): The type of directory.
+
+    Returns:
+        str: A valid directory path.
+    """
+    while True:
+        directory: str = input(f"Enter a valid {directory_type} directory: ")
+        if os.path.exists(directory):
+            return directory
+        print(f"Directory '{directory}' does not exist. Please try again.")
+
+
 def prepareDirectories(source: str, destination: str) -> tuple[str, str]:
     """
     Prepare the source and destination directories.
@@ -179,10 +217,17 @@ def prepareDirectories(source: str, destination: str) -> tuple[str, str]:
     Returns:
         tuple: The source and destination directories.
     """
-    while (source is None) or (not os.path.exists(source)):
-        source = input("Enter a valid source directory\n")
-    while (destination is None) or (not os.path.exists(destination)):
-        destination = input("Enter a valid destination directory\n")
+    source = (
+        sanitize_path(prompt_for_directory("source"))
+        if not source
+        else sanitize_path(source)
+    )
+    destination = (
+        sanitize_path(prompt_for_directory("destination"))
+        if not destination
+        else sanitize_path(destination)
+    )
+
     return source, destination
 
 
