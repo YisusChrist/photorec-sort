@@ -2,7 +2,7 @@
 
 from argparse import ArgumentTypeError, Namespace
 
-from core_helpers.cli import ArgparseColorThemes, setup_parser
+from core_helpers.cli import setup_parser
 
 from .consts import PACKAGE
 from .consts import __version__ as VERSION
