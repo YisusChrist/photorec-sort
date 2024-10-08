@@ -1,5 +1,8 @@
-from argparse import (ArgumentParser, ArgumentTypeError, Namespace,
-                      RawTextHelpFormatter)
+"""CLI module for photorec_sort."""
+
+from argparse import ArgumentTypeError, Namespace
+
+from core_helpers.cli import ArgparseColorThemes, setup_parser
 
 from .consts import PACKAGE
 from .consts import __version__ as VERSION
@@ -34,15 +37,13 @@ Finally any directories containing more than a maximum number of files are
 accordingly split into separate directories.
 """
 
-    parser = ArgumentParser(
-        description=description,
-        formatter_class=RawTextHelpFormatter,  # Disable line wrapping
-        allow_abbrev=False,  # Disable abbreviations
-        add_help=False,  # Disable default help
+    parser, main_group = setup_parser(
+        PACKAGE,
+        description,
+        VERSION,
     )
 
     # Main arguments
-    main_group = parser.add_argument_group("Main Arguments")
     main_group.add_argument(
         "-src",
         "--source",
@@ -86,8 +87,8 @@ accordingly split into separate directories.
     )
 
     # Miscellaneous options
-    misc_group = parser.add_argument_group("Miscellaneous Options")
-    misc_group.add_argument(
+    utils_group = parser.add_argument_group("Utilities Options")
+    utils_group.add_argument(
         "-md",
         "--min-event-delta",
         metavar="DAYS",
@@ -95,42 +96,13 @@ accordingly split into separate directories.
         default=4,
         help="minimum delta in days between two days",
     )
-    misc_group.add_argument(
+    utils_group.add_argument(
         "-j",
         "--date_time_filename",
         action="store_true",
         default=False,
         help="sets the filename to the exif date and time if possible - "
         "otherwise keep the original filename",
-    )
-
-    # Help and information
-    info_group = parser.add_argument_group("Information")
-    info_group.add_argument(
-        "-h", "--help", action="help", help="Show this help message and exit."
-    )
-    info_group.add_argument(
-        "-v",
-        "--verbose",
-        dest="verbose",
-        action="store_true",
-        default=False,
-        help="Show log messages on screen. Default is False.",
-    )
-    info_group.add_argument(
-        "-d",
-        "--debug",
-        dest="debug",
-        action="store_true",
-        default=False,
-        help="Activate debug logs. Default is False.",
-    )
-    info_group.add_argument(
-        "-V",
-        "--version",
-        action="version",
-        help="Show version number and exit.",
-        version=f"{PACKAGE} version {VERSION}",
     )
 
     return parser.parse_args()
