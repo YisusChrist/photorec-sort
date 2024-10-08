@@ -1,4 +1,5 @@
-import os
+"""Main module for the photorec_sort package."""
+
 from argparse import Namespace
 
 from rich import print  # type: ignore
