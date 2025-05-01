@@ -155,14 +155,14 @@ resolved_reference = "569c15f4c185250e886bdb157017a5189eb9f545"
 
 [[package]]
 name = "exifread"
-version = "3.2.0"
+version = "3.3.0"
 description = "Library to extract Exif information from digital camera image files."
 optional = false
 python-versions = ">=3.7"
 groups = ["main"]
 files = [
-    {file = "exifread-3.2.0-py3-none-any.whl", hash = "sha256:61bf924693f89626cc36a35fc0eeb4513e6638b2f319e9a1ed83b3227492e81c"},
-    {file = "exifread-3.2.0.tar.gz", hash = "sha256:9bc3e34b2a25754a445aadd94c9af911928ef95de8c7a91f85219a8b4202c23d"},
+    {file = "exifread-3.3.0-py3-none-any.whl", hash = "sha256:be97486f8136344764e2998f2a321ed41e1bb09c89fa9b5f5a5ab3079f26169a"},
+    {file = "exifread-3.3.0.tar.gz", hash = "sha256:5c7c9b0f1be18908db422acf9cfb4ec353828fc62ae45a3ebf9e9e16bb028765"},
 ]
 
 [package.extras]
@@ -191,6 +191,7 @@ description = "Read metadata from Python packages"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
+markers = "python_version < \"3.10\""
 files = [
     {file = "importlib_metadata-8.7.0-py3-none-any.whl", hash = "sha256:e5dd1551894c77868a30651cef00984d50e1002d06942a7101d34870c5f02afd"},
     {file = "importlib_metadata-8.7.0.tar.gz", hash = "sha256:d13b81ad223b890aa16c5471f2ac3056cf76c5f10f82d6f9292f0b415f389000"},
@@ -454,6 +455,7 @@ description = "Backport of pathlib-compatible object wrapper for zip files"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
+markers = "python_version < \"3.10\""
 files = [
     {file = "zipp-3.21.0-py3-none-any.whl", hash = "sha256:ac1bbe05fd2991f160ebce24ffbac5f6d11d83dc90891255885223d42b3cd931"},
     {file = "zipp-3.21.0.tar.gz", hash = "sha256:2c9958f6430a2040341a52eb608ed6dd93ef4392e02ffe219417c1b28b5dd1f4"},
