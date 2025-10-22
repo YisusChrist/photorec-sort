@@ -1,15 +1,15 @@
 """Utility functions for photorec_sort."""
 
 import os
-from pathlib import Path
 import shutil
+from pathlib import Path
 from time import strftime, strptime
 
 import exifread  # type: ignore
+from core_helpers.logs import logger
 from rich.progress import Progress
 
-from .jpg_sorter import getMinimumCreationTime
-from .logs import logger
+from photorec_sort.jpg_sorter import getMinimumCreationTime
 
 fileCounter: int = 0
 

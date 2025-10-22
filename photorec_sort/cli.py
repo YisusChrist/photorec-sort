@@ -4,8 +4,8 @@ from argparse import ArgumentTypeError, Namespace
 
 from core_helpers.cli import setup_parser
 
-from .consts import PACKAGE
-from .consts import __version__ as VERSION
+from photorec_sort.consts import PACKAGE
+from photorec_sort.consts import __version__ as VERSION
 
 
 def check_valid_int(value: str) -> int:

@@ -7,10 +7,9 @@ from time import localtime, mktime, strftime, strptime, struct_time
 from typing import Any, Optional
 
 import exifread  # type: ignore
+from core_helpers.logs import logger
 from rich import print  # type: ignore
 from rich.progress import Progress
-
-from .logs import logger
 
 unknownDateFolderName: str = "date-unknown"
 

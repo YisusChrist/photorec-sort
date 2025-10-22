@@ -2,18 +2,22 @@
 
 from argparse import Namespace
 
+from core_helpers.logs import logger
 from rich import print  # type: ignore
+from rich.traceback import install  # type: ignore
 
-from .cli import get_parsed_args
-from .jpg_sorter import postprocessImages
-from .limit import limitFilesPerFolder
-from .logs import logger
-from .utils import (getNumberOfFilesInFolderRecursively, prepareDirectories,
-                    processFiles)
+from photorec_sort.cli import get_parsed_args
+from photorec_sort.consts import LOG_FILE, PACKAGE
+from photorec_sort.jpg_sorter import postprocessImages
+from photorec_sort.limit import limitFilesPerFolder
+from photorec_sort.utils import (getNumberOfFilesInFolderRecursively,
+                                 prepareDirectories, processFiles)
 
 
 def main() -> None:
     args: Namespace = get_parsed_args()
+    install(show_locals=args.debug)
+    logger.setup_logger(PACKAGE, LOG_FILE, args.debug, args.verbose)
 
     source: str = args.source
     destination: str = args.destination
@@ -21,7 +25,7 @@ def main() -> None:
     keepFilename: bool = args.keep_filename
     date_time_filename: bool = args.date_time_filename
     maxNumberOfFilesPerFolder: int = args.max_per_dir
-    minEventDeltaDays = args.min_event_delta
+    minEventDeltaDays: int = args.min_event_delta
 
     logger.info("Starting recovery...")
 
